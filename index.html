@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Два пончика и 2чашка кофе</title>
+    <style>
+        /* === ПЕРЕМЕННЫЕ (Цветовая схема) === */
+        :root {
+            --bg-color: #FDFBF7; /* Светло-кремовый фон */
+            --text-main: #2C1D11; /* Глубокий кофейный (почти черный) */
+            --text-muted: #7A6352; /* Мягкий коричневый для текста */
+            --accent: #A67B5B; /* Теплый карамельный */
+            --accent-hover: #8A6448; /* Темный карамельный */
+            --card-bg: #FFFFFF; /* Белый для карточек */
+            --nav-bg: rgba(253, 251, 247, 0.75); /* Полупрозрачный кремовый */
+        }
+
+        /* === БАЗОВЫЕ НАСТРОЙКИ === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* === ТИПОГРАФИКА === */
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 5vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* === НАВИГАЦИЯ (Эффект Apple Glassmorphism) === */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(44, 29, 17, 0.05);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* === КНОПКИ === */
+        .btn {
+            display: inline-block;
+            background-color: var(--text-main);
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 999px; /* Скругление в стиле Apple */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--accent);
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(166, 123, 91, 0.3);
+        }
+
+        /* === СЕКЦИЯ HERO === */
+        .hero {
+            padding-top: 140px;
+            padding-bottom: 80px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-image {
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 24px 48px rgba(44, 29, 17, 0.1);
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .hero-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* === О КОМПАНИИ === */
+        .about {
+            padding: 120px 0;
+            background-color: #F8F5EF;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content p {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: var(--text-main);
+        }
+
+        /* === МЕНЮ (Карточки) === */
+        .menu {
+            padding: 120px 0;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(44, 29, 17, 0.12);
+        }
+
+        .card-img {
+            height: 240px;
+            overflow: hidden;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .menu-card:hover .card-img img {
+            transform: scale(1.08);
+        }
+
+        .card-info {
+            padding: 24px;
+        }
+
+        .card-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+
+        .card-info p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* === КОНТАКТЫ === */
+        .contact {
+            padding: 120px 0;
+            background-color: var(--text-main);
+            color: #fff;
+            text-align: center;
+        }
+
+        .contact h2 {
+            color: #fff;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-block h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .contact-block p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+        }
+
+        /* === ФУТЕР === */
+        footer {
+            background-color: var(--text-main);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* === АНИМАЦИИ === */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .hero {
+                padding-top: 120px;
+            }
+
+            .nav-links {
+                display: none; /* В реальном проекте здесь будет бургер-меню */
+            }
+
+            .about-content p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- НАВИГАЦИЯ -->
+    <header>
+        <div class="nav-container">
+            <a href="#home" class="logo">Два пончика & Кофе</a>
+            <ul class="nav-links">
+                <li><a href="#about">История</a></li>
+                <li><a href="#menu">Меню</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- ГЛАВНАЯ СЕКЦИЯ -->
+    <section id="home" class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <h1>Искусство<br>в каждом глотке.</h1>
+                <p>«Два пончика и чашка кофе» — место, где начинается ваше идеальное утро. Премиальные зерна, домашняя выпечка и атмосфера абсолютного комфорта.</p>
+                <a href="#menu" class="btn">Посмотреть меню</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Кофе и пончик">
+            </div>
+        </div>
+    </section>
+
+    <!-- О КОМПАНИИ -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Наша история</h2>
+            <div class="about-content">
+                <p>Мы начали с простой, но изящной идеи: идеальный день всегда начинается со свежесваренного кофе и свежего горячего пончика. Наша философия строится на внимании к деталям — от отбора лучших кофейных зерен со всего мира до создания идеальной текстуры теста. Это не просто кофейня. Это ритуал, к которому хочется возвращаться.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- МЕНЮ -->
+    <section id="menu" class="menu">
+        <div class="container">
+            <h2>Фирменное меню</h2>
+            <div class="menu-grid">
+                <!-- Карточка 1 -->
+                <div class="menu-card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Капучино">
+                    </div>
+                    <div class="card-info">
+                        <h3>Шелковый Капучино</h3>
+                        <p>Идеальный баланс двойного эспрессо и микропены. Нежная текстура и яркий вкус.</p>
+                    </div>
+                </div>
+                <!-- Карточка 2 -->
+                <div class="menu-card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Латте">
+                    </div>
+                    <div class="card-info">
+                        <h3>Карамельный Латте</h3>
+                        <p>Сладкий и согревающий. Приготовлен с добавлением карамели ручной работы.</p>
+                    </div>
+                </div>
+                <!-- Карточка 3 -->
+                <div class="menu-card">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1514517521153-1be72277b32f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Пончик">
+                    </div>
+                    <div class="card-info">
+                        <h3>Пончик «Классика»</h3>
+                        <p>Тот самый вкус. Воздушное тесто, покрытое тонким слоем хрустящей сахарной глазури.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- КОНТАКТЫ -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Ждем вас в гости</h2>
+            <div class="contact-info">
+                <div class="contact-block">
+                    <h3>Часы работы</h3>
+                    <p>Пн - Пт: 08:00 – 20:00</p>
+                    <p>Сб - Вс: 09:00 – 21:00</p>
+                </div>
+                <div class="contact-block">
+                    <h3>Локация</h3>
+                    <p>ул. Кофейная, 42</p>
+                    <p>Центральный район, Ваш Город</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ФУТЕР -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Два пончика и чашка кофе. Все права защищены.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
